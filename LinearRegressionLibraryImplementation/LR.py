@@ -14,6 +14,8 @@ x1_Beds = []
 x2_Baths = []
 x3_SquareFeet = []
 row = []
+X_Matrix = []
+Y_Price_Mat = []
 
 def Read_Data():
     isHeading = True
@@ -76,20 +78,19 @@ def Read_Data1():
 
 
 def Create_Matrix():
+    global Y_Price_Mat
     Y_Price_Mat = np.matrix(Y_Price)
-#    MatrixRows = []
-#    for i in range(0,350):
-#        MatrixRows.append(x1_Beds[i]+","+x2_Baths[i]+","+x3_SquareFeet[i]+";")
+
         
-    MatrixBeds = np.array(x1_Beds)
-    MatrixBaths = np.array(x2_Baths)
+    ArrayBeds = np.array(x1_Beds)
+    ArrayBaths = np.array(x2_Baths)
+    OneArray = np.ones((350,1))
     
-    np.reshape(MatrixBeds,(,350))
+    global X_Matrix
+    X_Matrix =  np.column_stack((OneArray,ArrayBeds,ArrayBaths))
     
-    #MatrixSquareFeet = np.array(x3_SquareFeet)
-    
-    #tempMatrix = np.concatenate((MatrixBeds,MatrixBaths.T),axis = 1)
-    #print(tempMatrix.shape)
+    print(X_Matrix)
+
     
 def main():
     Read_Data()
