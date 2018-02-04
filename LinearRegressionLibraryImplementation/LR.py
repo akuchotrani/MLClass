@@ -16,10 +16,7 @@ x2_Baths = []
 x3_SquareFeet = []
 row = []
 X_Matrix = []
-Y_Price_Mat = []
 
-X_Test = []
-Y_Test = []
 
 def Read_Data():
     isHeading = True
@@ -103,60 +100,64 @@ def Split_Data():
     test_Y_Price = Y_Price[-100:]
 
 def Create_Matrix():
-    global Y_Price_Mat
-    Y_Price_Mat = np.matrix(Y_Price)
 
-    ArrayBeds = np.array(x1_Beds)
-    ArrayBaths = np.array(x2_Baths)
-    ArraySqFeet = np.array(x3_SquareFeet)
-    OneArray = np.ones((350,1))
+    ArrayBeds = np.array(train_x1_Beds)
+    ArrayBaths = np.array(train_x2_Baths)
+    ArraySqFeet = np.array(train_x3_SqFeet)
+    OneArray = np.ones((250,1))
 
     global X_Matrix
     X_Matrix =  np.column_stack((OneArray,ArrayBeds,ArrayBaths,ArraySqFeet))
     
-    print("X_Matrix\n",X_Matrix,"\n")
+    #print("X_Matrix\n",X_Matrix,"\n")
 
 
 def Linear_Regression():
     X_Matrix_Transpose = X_Matrix.transpose()
-    print("X_Matrix Transpose\n",X_Matrix_Transpose,"\n")
+    #print("X_Matrix Transpose\n",X_Matrix_Transpose,"\n")
     Inverse_Xtranspose_X = np.linalg.inv(np.matmul(X_Matrix_Transpose,X_Matrix))
-    print("Inverse X_transpose_X:\n",Inverse_Xtranspose_X,"\n") 
+    #print("Inverse X_transpose_X:\n",Inverse_Xtranspose_X,"\n") 
     
     temp = np.squeeze(np.asarray(X_Matrix_Transpose))
-    temp2 = np.squeeze(np.asarray(Y_Price_Mat))
+    temp2 = np.squeeze(np.asarray(train_Y_Price))
     Xtranspose_Y = np.dot(temp,temp2)
-    print("Xtranspose_Y:\n",Xtranspose_Y,"\n")
+    #print("Xtranspose_Y:\n",Xtranspose_Y,"\n")
 
 
     global theta
     theta = np.matmul(Inverse_Xtranspose_X,Xtranspose_Y)
-    print(theta)
+    #print(theta)
 
 def Plot_Result():
     # Visualising the Training set results
     #plt.plot(X_train, regressor.predict(X_train), color = 'blue')
-    predictedPrices = np.zeros(350)
-    print("theta 0 : ",theta[0])
-    print("theta 1 : ",theta[1])
-    print("theta 2 : ",theta[2])
-    print("theta 3 : ",theta[3])
-    for x in range(0,350):
-        predictedPrices[x] = theta[0] + theta[1]*x1_Beds[x] + theta[2]*x2_Baths[x] + theta[3]*x3_SquareFeet[x]
+    predictedPricesTrain = np.zeros(250)
+#    print("theta 0 : ",theta[0])
+#    print("theta 1 : ",theta[1])
+#    print("theta 2 : ",theta[2])
+#    print("theta 3 : ",theta[3])
+    for x in range(0,250):
+        predictedPricesTrain[x] = theta[0] + theta[1]*train_x1_Beds[x] + theta[2]*train_x2_Baths[x] + theta[3]*train_x3_SqFeet[x]
     
-    print(predictedPrices)
+    #print(predictedPrices)
     plt.title('Squarefeet vs Price (Training set)')
     plt.xlabel('Squre Feet')
     plt.ylabel('Price of houses')
-    plt.scatter(x3_SquareFeet,predictedPrices, color = 'red')
-    
-    line = np.zeros(350)
-    for i in range (0,350):
-        line[i] = theta[3]*x3_SquareFeet[i] + theta[0]
-        
-    print(line)
-    
+    plt.scatter(train_x3_SqFeet,predictedPricesTrain, color = 'red')
+    plt.scatter(train_x3_SqFeet,train_Y_Price,color = 'orange')
     plt.show()
+    
+    predictedPricesTest = np.zeros(100)
+    for x in range(0,100):
+        predictedPricesTest[x] = theta[0] + theta[1]*test_x1_Beds[x] + theta[2]*test_x2_Baths[x] + theta[3]*test_x3_SqFeet[x]
+    plt.title('Squarefeet vs Price (Test set)')
+    plt.xlabel('Squre Feet')
+    plt.ylabel('Price of houses')
+    plt.scatter(test_x3_SqFeet,predictedPricesTest, color = 'green')
+    plt.scatter(test_x3_SqFeet,test_Y_Price,color = 'blue')
+    plt.show()
+    
+    
 
 
 def main():
