@@ -14,7 +14,6 @@ Y_Price = []
 x1_Beds = []
 x2_Baths = []
 x3_SquareFeet = []
-row = []
 X_Matrix = []
 
 
@@ -130,12 +129,12 @@ def Linear_Regression():
 
 def Plot_Result():
     # Visualising the Training set results
-    #plt.plot(X_train, regressor.predict(X_train), color = 'blue')
+    #print("theta 0 : ",theta[0])
+    #print("theta 1 : ",theta[1])
+    #print("theta 2 : ",theta[2])
+    #print("theta 3 : ",theta[3])
     predictedPricesTrain = np.zeros(250)
-#    print("theta 0 : ",theta[0])
-#    print("theta 1 : ",theta[1])
-#    print("theta 2 : ",theta[2])
-#    print("theta 3 : ",theta[3])
+
     for x in range(0,250):
         predictedPricesTrain[x] = theta[0] + theta[1]*train_x1_Beds[x] + theta[2]*train_x2_Baths[x] + theta[3]*train_x3_SqFeet[x]
     
