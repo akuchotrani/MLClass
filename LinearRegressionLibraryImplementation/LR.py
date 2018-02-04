@@ -47,36 +47,6 @@ def Read_Data():
             x3_SquareFeet.append(int(row[11]))
 
 
-def Read_Data1():
-    isHeading = True
-    
-    for row in CSV_Data:
-        #skip the first row of csv file
-        if isHeading == True:
-            isHeading = False
-            continue
-    
-        if(row[7] == ""):
-            Y_Price.append("0")
-        else:
-            Y_Price.append((row[7]))
-    
-        if(row[8] == ""):
-            x1_Beds.append("0")
-        else:
-            x1_Beds.append((row[8]))
-    
-        if(row[9] == ""):
-            x2_Baths.append("0")
-        else:
-            x2_Baths.append(row[9])
-            
-        if(row[11] == ""):
-            x3_SquareFeet.append("0")
-        else:
-            x3_SquareFeet.append((row[11]))
-
-
 def Split_Data():
     global train_x1_Beds
     train_x1_Beds = x1_Beds[0:250]
