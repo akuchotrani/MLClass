@@ -7,6 +7,7 @@ Created on Wed Jan 24 15:46:44 2018
 
 import csv
 import numpy as np
+import statistics
 import matplotlib.pyplot as plt
 
 CSV_Data = csv.reader(open('redfinBothell.csv', newline=''))
@@ -45,6 +46,79 @@ def Read_Data():
             x3_SquareFeet.append(0)
         else:
             x3_SquareFeet.append(int(row[11]))
+            
+def Clean_Data_Average():
+    global Y_Price
+    global x1_Beds
+    global x2_Baths
+    global x3_SquareFeet
+    
+    
+    #Cleaning Price with average price
+    averagePrice = sum(Y_Price)/len(Y_Price)
+    
+    for x in range(0,len(Y_Price)):
+        if(Y_Price[x] == 0):
+            Y_Price[x] = averagePrice
+            
+            
+    #Cleaning X1_Beds with average price
+    averageBeds = sum(x1_Beds)/len(x1_Beds)
+    #print(averageBeds)
+    for x in range(0,len(x1_Beds)):
+        if(x1_Beds[x] == 0):
+            x1_Beds[x] = averageBeds
+    
+    #Cleaning x2_Baths with average price
+    averageBaths = sum(x2_Baths)/len(x2_Baths)
+    #print(averageBaths)
+    for x in range(0,len(x2_Baths)):
+        if(x2_Baths[x] == 0):
+            x2_Baths[x] = averageBaths
+    
+    #Cleaning x2_Baths with average price
+    averagePriceSqFeet = sum(x3_SquareFeet)/len(x3_SquareFeet)
+    #print(averagePriceSqFeet)
+    for x in range(0,len(x3_SquareFeet)):
+        if(x3_SquareFeet[x] == 0):
+            x3_SquareFeet[x] = averagePriceSqFeet
+            
+            
+def Clean_Data_Median():
+    global Y_Price
+    global x1_Beds
+    global x2_Baths
+    global x3_SquareFeet
+    
+    
+    #Cleaning Price with average price
+    medianPrice = statistics.median(Y_Price)
+    for x in range(0,len(Y_Price)):
+        if(Y_Price[x] == 0):
+            Y_Price[x] = medianPrice
+            
+            
+    #Cleaning X1_Beds with average price
+    medianBeds = statistics.median(x1_Beds)
+    #print(medianPrice)
+    for x in range(0,len(x1_Beds)):
+        if(x1_Beds[x] == 0):
+            x1_Beds[x] = medianBeds
+    
+    #Cleaning x2_Baths with average price
+    medianBaths = statistics.median(x2_Baths)
+    #print(medianBaths)
+    for x in range(0,len(x2_Baths)):
+        if(x2_Baths[x] == 0):
+            x2_Baths[x] = medianBaths
+    
+    #Cleaning x2_Baths with average price
+    medianSqFeeet = statistics.median(x3_SquareFeet)
+    #print(medianSqFeeet)
+    for x in range(0,len(x3_SquareFeet)):
+        if(x3_SquareFeet[x] == 0):
+            x3_SquareFeet[x] = medianSqFeeet
+    
 
 
 def Split_Data():
@@ -131,6 +205,8 @@ def Plot_Result():
 
 def main():
     Read_Data()
+    Clean_Data_Average()
+    #Clean_Data_Median()
     Split_Data()
     Create_Matrix()
     Linear_Regression()
