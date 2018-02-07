@@ -9,6 +9,8 @@ import csv
 import numpy as np
 import statistics
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+
 
 CSV_Data = csv.reader(open('redfinBothell.csv', newline=''))
 Y_Price = []
@@ -16,6 +18,9 @@ x1_Beds = []
 x2_Baths = []
 x3_SquareFeet = []
 X_Matrix = []
+
+MAX_ITERATIONS = 200
+LEARNING_RATE = 0.05
 
 
 def Read_Data():
@@ -170,6 +175,29 @@ def Linear_Regression():
     global theta
     theta = np.matmul(Inverse_Xtranspose_X,Xtranspose_Y)
     #print(theta)
+    
+    
+    
+def Linear_Regression_Gradient_Descent():
+    X_Matrix_Transpose = X_Matrix.transpose()
+    m = 4 #X_Matrix shape
+    #print(X_Matrix_Transpose)
+    WEIGHTS = np.ones(4)
+    print(WEIGHTS)
+    for iteration in range(0,MAX_ITERATIONS):
+        hypothesis = np.dot(X_Matrix,WEIGHTS)
+        #print(hypothesis)
+        
+        loss = hypothesis - train_Y_Price
+        cost = np.sum(loss ** 2)/(2*m)
+        
+        gradient = np.dot(X_Matrix_Transpose,loss)
+        print("iteration: ",iteration," cost: ",cost," Gradient: ",gradient)
+        WEIGHTS = WEIGHTS - gradient.dot(LEARNING_RATE)
+    
+    print("Weights:",WEIGHTS)
+    return WEIGHTS
+
 
 def Plot_Result():
     # Visualising the Training set results
@@ -200,7 +228,12 @@ def Plot_Result():
     plt.scatter(test_x3_SqFeet,test_Y_Price,color = 'blue')
     plt.show()
     
-    
+
+
+def PerformFeatureScaling():
+    global X_Matrix
+    sc_X = StandardScaler()
+    X_Matrix = sc_X.fit_transform(X_Matrix)
 
 
 def main():
@@ -209,7 +242,11 @@ def main():
     #Clean_Data_Median()
     Split_Data()
     Create_Matrix()
-    Linear_Regression()
+    #Linear_Regression()
+    PerformFeatureScaling()
+    Linear_Regression_Gradient_Descent()
+    global theta
+    theta = Linear_Regression_Gradient_Descent()
     Plot_Result()
 
 
