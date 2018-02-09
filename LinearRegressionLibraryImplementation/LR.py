@@ -242,9 +242,9 @@ def main():
     #Clean_Data_Median()
     Split_Data()
     Create_Matrix()
-    #Linear_Regression()
+    Linear_Regression()
     PerformFeatureScaling()
-    Linear_Regression_Gradient_Descent()
+    #Linear_Regression_Gradient_Descent()
     global theta
     theta = Linear_Regression_Gradient_Descent()
     Plot_Result()
