@@ -7,15 +7,23 @@ Created on Mon Feb 12 13:10:15 2018
 
 import csv
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
 import math
+from sklearn.preprocessing import MinMaxScaler
+
+
+def sigmoid(x):
+    if(x > 0):
+        return 1 / (1 + math.exp(-x))
+    else:
+        return math.exp(x)/(1+math.exp(x))
+
+        
 
 ################################################################################
 ################################################################################
 
 MAX_ITERATIONS = 100
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.0001
 Y_Admit = []
 x1_gre = []
 x2_gpa = []
@@ -51,13 +59,12 @@ def Read_Data():
 
 def CreateMatrix():
     
-    Array_Ones = np.ones((400,1))
     Array_Gre = np.array(x1_gre)
     Array_Gpa = np.array(x2_gpa)
     Array_Rank = np.array(x3_rank)
 
     global X_Matrix
-    X_Matrix =  np.column_stack((Array_Ones,Array_Gre,Array_Gpa,Array_Rank))
+    X_Matrix =  np.column_stack((Array_Gre,Array_Gpa,Array_Rank))
     
     global Theta_Matrix
     Theta_Matrix = np.column_stack((theta0,theta1,theta2,theta3))
@@ -67,9 +74,18 @@ def CreateMatrix():
     
 def PerformFeatureScaling():
     global X_Matrix
-    sc_X = StandardScaler()
-    X_Matrix = sc_X.fit_transform(X_Matrix)
+    #sc_X = StandardScaler()
+    #X_Matrix = sc_X.fit_transform(X_Matrix)
+    scaler = MinMaxScaler()
+    scaler.fit(X_Matrix)
+    X_Matrix = scaler.transform(X_Matrix)
     
+    Array_Ones = np.ones((400,1))
+    X_Matrix =  np.column_stack((Array_Ones,X_Matrix))
+
+    
+################################################################################
+################################################################################
 
 def Spit_Dataset():
     
@@ -90,24 +106,57 @@ def Spit_Dataset():
 
 def Logistic_Regression_Gradient_Descent():
     
-    global Theta_Matrix
+#    global Theta_Matrix
+#    
+#    for iteration in range(0,MAX_ITERATIONS):
+#        #print("Iteration: ",iteration,"Theta Matrix: ",Theta_Matrix)
+#        for matrix_iteration in range(0,len(X_Matrix_Train)):
+#            #print(X_Matrix_Train[matrix_iteration])
+#            result = np.dot(X_Matrix_Train[matrix_iteration],Theta_Matrix[0])
+#            print("Theta[0]",Theta_Matrix[0])
+#            
+#            if result > 0:
+#                sigmaFunction = 1/(1+math.exp(-result))
+#            else:
+#                sigmaFunction = math.exp(result)/(math.exp(result) + 1)
+#            
+#            tempGradient = (Y_Admit_Train[matrix_iteration] - sigmaFunction)
+#            Gradient = np.dot(tempGradient,X_Matrix_Train[matrix_iteration])
+#            Gradient = Gradient * LEARNING_RATE
+#            Theta_Matrix = np.subtract(Theta_Matrix,Gradient)
     
+    
+            
+#    global Theta_Matrix
+#    result = 0
+#    SummationResult = np.zeros(4)
+#    for iteration in range(0,MAX_ITERATIONS):
+#        print("Iteration: ",iteration,"Theta Matrix: ",Theta_Matrix)
+#        for matrix_iteration in range(0,len(X_Matrix_Train)):
+#            result = np.dot(X_Matrix_Train[matrix_iteration],Theta_Matrix[0])
+#            sigmaFunction = sigmoid(result)
+#            tempGradient = sigmaFunction*(1-sigmaFunction)*(sigmaFunction - Y_Admit_Train[matrix_iteration])
+#            SummationResult = SummationResult + np.dot(tempGradient,X_Matrix_Train[matrix_iteration])
+#        print("SummationResult:",SummationResult)
+#        Gradient = SummationResult*LEARNING_RATE
+#        print("Gradient: ",Gradient,"\n")
+#        Theta_Matrix = np.subtract(Theta_Matrix,Gradient)
+        
+        
+    global Theta_Matrix
+    result = 0
+    SummationResult = np.zeros(4)
     for iteration in range(0,MAX_ITERATIONS):
-        #print("Iteration: ",iteration,"Theta Matrix: ",Theta_Matrix)
+        print("Iteration: ",iteration,"Theta Matrix: ",Theta_Matrix)
         for matrix_iteration in range(0,len(X_Matrix_Train)):
-            #print(X_Matrix_Train[matrix_iteration])
             result = np.dot(X_Matrix_Train[matrix_iteration],Theta_Matrix[0])
-            print("Theta[0]",Theta_Matrix[0])
-            
-            if result > 0:
-                sigmaFunction = 1/(1+math.exp(-result))
-            else:
-                sigmaFunction = math.exp(result)/(math.exp(result) + 1)
-            
+            sigmaFunction = sigmoid(result)
             tempGradient = (Y_Admit_Train[matrix_iteration] - sigmaFunction)
-            Gradient = np.dot(tempGradient,X_Matrix_Train[matrix_iteration])
-            Gradient = Gradient * LEARNING_RATE
-            Theta_Matrix = np.subtract(Theta_Matrix,Gradient)
+            SummationResult = SummationResult + np.dot(tempGradient,X_Matrix_Train[matrix_iteration])
+        print("SummationResult:",SummationResult)
+        Gradient = SummationResult*LEARNING_RATE
+        print("Gradient: ",Gradient,"\n")
+        Theta_Matrix = np.subtract(Theta_Matrix,Gradient)
 
     
 ################################################################################
@@ -115,10 +164,12 @@ def Logistic_Regression_Gradient_Descent():
             
 def Predict_Results():
 
+    global Y_Prediction
     Y_Prediction = []
     for item in range(0,len(Y_Admit_Test)):
         result = np.dot(Theta_Matrix,X_Matrix_Test[item])
-        if result > 0:
+        result = sigmoid(result)
+        if result > 0.5:
             Y_Prediction.append(1)
         else:
             Y_Prediction.append(0)
@@ -135,8 +186,9 @@ def Predict_Results():
     print("Correct Predictions: ",correct_counter)
     print("InCorrect Predictions: ",incorrect_counter)
 
-        
 
+################################################################################
+################################################################################
 
 def main():
     Read_Data()
