@@ -127,22 +127,6 @@ def Logistic_Regression_Gradient_Descent():
     
     
             
-#    global Theta_Matrix
-#    result = 0
-#    SummationResult = np.zeros(4)
-#    for iteration in range(0,MAX_ITERATIONS):
-#        print("Iteration: ",iteration,"Theta Matrix: ",Theta_Matrix)
-#        for matrix_iteration in range(0,len(X_Matrix_Train)):
-#            result = np.dot(X_Matrix_Train[matrix_iteration],Theta_Matrix[0])
-#            sigmaFunction = sigmoid(result)
-#            tempGradient = sigmaFunction*(1-sigmaFunction)*(sigmaFunction - Y_Admit_Train[matrix_iteration])
-#            SummationResult = SummationResult + np.dot(tempGradient,X_Matrix_Train[matrix_iteration])
-#        print("SummationResult:",SummationResult)
-#        Gradient = SummationResult*LEARNING_RATE
-#        print("Gradient: ",Gradient,"\n")
-#        Theta_Matrix = np.subtract(Theta_Matrix,Gradient)
-        
-        
     global Theta_Matrix
     result = 0
     SummationResult = np.zeros(4)
@@ -151,12 +135,28 @@ def Logistic_Regression_Gradient_Descent():
         for matrix_iteration in range(0,len(X_Matrix_Train)):
             result = np.dot(X_Matrix_Train[matrix_iteration],Theta_Matrix[0])
             sigmaFunction = sigmoid(result)
-            tempGradient = (Y_Admit_Train[matrix_iteration] - sigmaFunction)
+            tempGradient = sigmaFunction*(1-sigmaFunction)*(sigmaFunction - Y_Admit_Train[matrix_iteration])
             SummationResult = SummationResult + np.dot(tempGradient,X_Matrix_Train[matrix_iteration])
         print("SummationResult:",SummationResult)
         Gradient = SummationResult*LEARNING_RATE
         print("Gradient: ",Gradient,"\n")
         Theta_Matrix = np.subtract(Theta_Matrix,Gradient)
+        
+        
+#    global Theta_Matrix
+#    result = 0
+#    SummationResult = np.zeros(4)
+#    for iteration in range(0,MAX_ITERATIONS):
+#        print("Iteration: ",iteration,"Theta Matrix: ",Theta_Matrix)
+#        for matrix_iteration in range(0,len(X_Matrix_Train)):
+#            result = np.dot(X_Matrix_Train[matrix_iteration],Theta_Matrix[0])
+#            sigmaFunction = sigmoid(result)
+#            tempGradient = (Y_Admit_Train[matrix_iteration] - sigmaFunction)
+#            SummationResult = SummationResult + np.dot(tempGradient,X_Matrix_Train[matrix_iteration])
+#        print("SummationResult:",SummationResult)
+#        Gradient = SummationResult*LEARNING_RATE
+#        print("Gradient: ",Gradient,"\n")
+#        Theta_Matrix = np.subtract(Theta_Matrix,Gradient)
 
     
 ################################################################################
