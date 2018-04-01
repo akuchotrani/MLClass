@@ -246,7 +246,7 @@ def main():
     PerformFeatureScaling()
     #Linear_Regression_Gradient_Descent()
     global theta
-    theta = Linear_Regression_Gradient_Descent()
+    #theta = Linear_Regression_Gradient_Descent()
     Plot_Result()
 
 
